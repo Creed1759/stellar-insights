@@ -43,7 +43,7 @@ npm run dev
 
 - `backend/` Rust services
 - `frontend/` Next.js dashboard
-- `mobile/` React Native mobile app
+- `mobile/` React Native mobile app — [current status](mobile/README.md#current-status)
 - `contracts/` Soroban contracts
 - `docs/` additional docs
 
