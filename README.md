@@ -7,32 +7,42 @@ A lean, production-grade stack for measuring and improving cross-border payment 
 - Backend: Rust analytics engine
 - Frontend: Next.js dashboard
 - Contracts: Soroban smart contracts (optional)
-- DB: PostgreSQL
+- DB: SQLite (WAL mode) — see [Database](#database) below
 
 ## 🔧 Quick start
 
-1. Start Postgres (example):
+No database server to install — SQLite runs in-process and the file is created
+on first start.
 
-```bash
-docker run --name stellar-postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=stellar_insights -p 5432:5432 -d postgres:14
-```
-
-2. Run backend
+1. Run backend
 
 ```bash
 cd backend
 cp .env.example .env
-# set DATABASE_URL, STELLAR_RPC_URL, etc.
+# DATABASE_URL already defaults to sqlite:./stellar_insights.db
+# set STELLAR_RPC_URL etc. as needed
 cargo run
 ```
 
-3. Run frontend
+2. Run frontend
 
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
+
+## Database
+
+**SQLite only.** This is a compile-time property, not a configuration one:
+`sqlx` is built with only the `sqlite` feature, `backend/src/database.rs` uses
+`SqlitePool`/`SqliteConnectOptions` directly, and every migration is written in
+SQLite-flavoured SQL.
+
+Setting a `postgresql://` `DATABASE_URL` does **not** switch databases — it
+fails to parse as `SqliteConnectOptions` and the backend refuses to start.
+Adding Postgres support is a code change. Whether to make it is being tracked
+in issue #1876.
 
 ## 🧪 Local safety checks (already built)
 
